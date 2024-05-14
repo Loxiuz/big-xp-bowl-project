@@ -1,7 +1,7 @@
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
 import { LaneTable } from "./types";
 
-const LANE_TABLE_URL = import.meta.env.BASE_URL + "laneTables";
+const LANE_TABLE_URL = import.meta.env.BASE_URL + "lanes_and_air_tables";
 
 async function getLaneTables(): Promise<LaneTable[]> {
   return fetch(LANE_TABLE_URL).then(handleHttpErrors);

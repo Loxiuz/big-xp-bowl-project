@@ -8,7 +8,7 @@ interface Customer {
   id: number | null;
   fullName: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   birthDate: Date | null;
 }
 

@@ -12,7 +12,7 @@ export default function ReservationForm() {
     id: null,
     fullName: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     birthDate: null,
   });
   const [reservationForm, setReservationForm] = useState<Reservation>({

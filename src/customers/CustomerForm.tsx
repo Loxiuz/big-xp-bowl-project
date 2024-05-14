@@ -13,7 +13,7 @@ export default function CustomerForm({ onChange }: CustomerFormProps) {
     id: null,
     fullName: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     birthDate: null,
   });
 
