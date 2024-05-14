@@ -27,8 +27,8 @@ interface LaneTable {
 
 interface Reservation {
   id: number | null;
-  customerId: number;
-  diningTableId: number;
+  customerId: number | null;
+  diningTableId: number | null;
   activity: string;
   noOfParticipants: number;
   activityStart: Date | null;

@@ -1,0 +1,7 @@
+#customer-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 1rem;
+  height: 100px;
+  width: 200px;
+}

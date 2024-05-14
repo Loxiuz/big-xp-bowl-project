@@ -1,0 +1,22 @@
+.lanes-tables-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
+  text-align: left;
+}
+
+.lanes-tables-form input[type="checkbox"] {
+  transform: scale(1.5);
+  margin-right: 0.5rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #000000;
+  padding: 0.5rem;
+}
+
+.lanes-tables-form input[type="checkbox"]:checked {
+  background-color: green;
+}
