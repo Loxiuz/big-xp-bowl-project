@@ -18,7 +18,10 @@ export default function ReservationForm() {
     customerId: null,
     diningTableId: null,
     activity: "",
-    noOfParticipants: 0,
+    numberOfLanes: 0,
+    numberOfJrLanes: 0,
+    numberOfAirTables: 0,
+    numberOfParticipants: 0,
     activityStart: new Date(),
     activityEnd: new Date(),
     creationDateTime: null,
@@ -112,7 +115,7 @@ export default function ReservationForm() {
           <label htmlFor="noOfParticipants">Number of Participants:</label>
           <input
             type="number"
-            name="noOfParticipants"
+            name="numberOfParticipants"
             onChange={handleReservationFormChange}
           />
           <BookingCalendar

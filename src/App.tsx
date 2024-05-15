@@ -21,7 +21,7 @@ function App() {
       <Route path="/manager/products" element={<ProductsList />} />
       <Route path="/manager/products/create" element={<ProductForm />} />
       <Route path="/manager/products/:id/edit" element={<ProductForm />} />
-      <Route path="/manager/maintenance" />
+      <Route path="/manager/maintenance" element={<h2>Maintenance</h2>} />
       <Route path="/operator" element={<h2>Operator</h2>} />
       <Route path="/operator/equipment" />
     </Routes>

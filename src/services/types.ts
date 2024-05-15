@@ -25,7 +25,10 @@ interface Reservation {
   customerId: number | null;
   diningTableId: number | null;
   activity: string;
-  noOfParticipants: number;
+  numberOfLanes: number;
+  numberOfJrLanes: number;
+  numberOfAirTables: number;
+  numberOfParticipants: number;
   activityStart: Date;
   activityEnd: Date;
   creationDateTime: Date | null;
