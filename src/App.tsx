@@ -9,6 +9,12 @@ function App() {
       <Route path="*" element={<h2>Not Found</h2>} />
       <Route path="/home" element={<Home />} />
       <Route path="/booking" element={<ReservationForm />} />
+      <Route path="/employee/bookings/:id/edit" />
+      <Route path="/manager/schedules" />
+      <Route path="/manager/products/create" />
+      <Route path="/manager/products/:id/create" />
+      <Route path="/manager/maintenance" />
+      <Route path="/operator/equipment" />
     </Routes>
   );
 }
