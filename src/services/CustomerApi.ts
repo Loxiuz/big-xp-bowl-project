@@ -1,7 +1,8 @@
+import { API_URL } from "../settings";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
 import { Customer } from "./types";
 
-const CUSTOMER_URL = import.meta.env.BASE_URL + "customers";
+const CUSTOMER_URL = API_URL + "/customers";
 
 async function getCustomers(): Promise<Customer[]> {
   return fetch(CUSTOMER_URL).then(handleHttpErrors);

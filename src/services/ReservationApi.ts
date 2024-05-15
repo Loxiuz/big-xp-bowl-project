@@ -1,6 +1,7 @@
+import { API_URL } from "../settings";
 import { handleHttpErrors, makeOptions } from "./fetchUtils";
 import { Reservation } from "./types";
-const RESERVATION_URL = import.meta.env.BASE_URL + "reservations";
+const RESERVATION_URL = API_URL + "/reservations";
 
 async function getReservations(): Promise<Reservation[]> {
   return fetch(RESERVATION_URL).then(handleHttpErrors);

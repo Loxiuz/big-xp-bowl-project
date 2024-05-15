@@ -25,7 +25,7 @@ export default function AirTables({ lanesTables, onChange }: AirTablesProps) {
 
   return (
     <>
-      <h3>Choose up to 4 lanes:</h3>
+      <h3>Choose up to 2 tables:</h3>
       <div className="lanes-tables-form">
         {lanesTables.map((laneTable) => {
           if (laneTable.type === "table") {
