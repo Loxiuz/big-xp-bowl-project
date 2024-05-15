@@ -24,22 +24,18 @@ export default function ProductForm() {
     }
   }, [id, setProductFormData]);
 
-  function handleProductFormChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const target = e.currentTarget;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const name = target.name;
-
-    setProductFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  }
-
-  function handleProductFormSelectChange(
-    e: React.ChangeEvent<HTMLSelectElement>
+  function handleProductFormChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
-    const target = e.currentTarget;
-    const value = target.value;
+    const target = e.target;
+    let value: string | boolean;
+
+    if (target instanceof HTMLInputElement && target.type === "checkbox") {
+      value = target.checked;
+    } else {
+      value = target.value;
+    }
+
     const name = target.name;
 
     setProductFormData((prevFormData) => ({
@@ -77,7 +73,7 @@ export default function ProductForm() {
         <label>Size:</label>
         <select
           name="size"
-          onChange={handleProductFormSelectChange}
+          onChange={handleProductFormChange}
           value={productFormData.size}
         >
           <option value="small">Small</option>
