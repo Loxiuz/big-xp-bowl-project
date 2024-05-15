@@ -1,14 +1,8 @@
 import "./ReservationForm.css";
 import BookingCalendar from "./BookingCalendar";
-import { Customer, LaneTable, Reservation } from "../services/types";
-import { useEffect, useState } from "react";
+import { Customer, Reservation } from "../services/types";
+import { useState } from "react";
 import CustomerForm from "../customers/CustomerForm";
-import BowlLanes from "../activities/BowlLanes";
-import AirTables from "../activities/AirTables";
-import {
-  // getLaneTableReservations,
-  getLaneTables,
-} from "../services/LaneTableApi";
 // import { getReservations } from "../services/ReservationApi";
 
 export default function ReservationForm() {
@@ -31,19 +25,8 @@ export default function ReservationForm() {
   });
   const [diningSeatAmount, setDiningSeatAmount] = useState(0);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
-  const [selectedLanes, setSelectedLanes] = useState<number[]>([]);
-  const [selectedTables, setSelectedTables] = useState<number[]>([]);
-  const [lanesTables, setLanesTables] = useState<LaneTable[]>([]);
   // const [availableDates, setAvailableDates] = useState<Date[]>([]);
   // const [availableTimes, setAvailableTimes] = useState<number[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await getLaneTables();
-      setLanesTables(response);
-    };
-    fetchData();
-  }, [setLanesTables]);
 
   // useEffect(() => {
   //   const fetchLaneTableReservations = async () => {
@@ -90,16 +73,6 @@ export default function ReservationForm() {
 
   function handleCustomerFormChange(customer: Customer) {
     setCustomerForm(customer);
-  }
-
-  function handleLanesChange(lanes: number[]) {
-    setSelectedLanes(lanes);
-    console.log("Selected lanes", selectedLanes);
-  }
-
-  function handleAirTablesChange(tables: number[]) {
-    setSelectedTables(tables);
-    console.log("Selected tables", selectedTables);
   }
 
   function handleDiningSeatAmountChange(
@@ -151,15 +124,6 @@ export default function ReservationForm() {
             availableTimes={["10:00", "12:00", "14:00", "16:00"]}
             onDateTimeSelected={handleDateTimeSelected}
           />
-          {reservationForm.activity === "bowling" && (
-            <BowlLanes lanesTables={lanesTables} onChange={handleLanesChange} />
-          )}
-          {reservationForm.activity === "airHockey" && (
-            <AirTables
-              lanesTables={lanesTables}
-              onChange={handleAirTablesChange}
-            />
-          )}
           <label htmlFor="diningSeatAmount">Dining Seat Amount:</label>
           <input
             type="number"

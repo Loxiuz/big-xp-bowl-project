@@ -12,19 +12,6 @@ interface Customer {
   birthDate: Date | null;
 }
 
-interface LaneTable {
-  id: number | null;
-  type: string;
-  isJunior: boolean;
-  isActive: boolean;
-}
-
-interface LaneTableReservation {
-  id: number | null;
-  laneTablesId: number;
-  reservationId: number;
-}
-
 interface Reservation {
   id: number | null;
   customerId: number | null;
