@@ -8,7 +8,7 @@ export default function ManagerHome() {
         <Link to="/manager/schedules">
           <button>Schedules</button>
         </Link>
-        <Link to="/manager/product">
+        <Link to="/manager/products">
           <button>Products</button>
         </Link>
         <Link to="/manager/maintenance">

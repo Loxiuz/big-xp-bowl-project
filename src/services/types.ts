@@ -4,6 +4,14 @@ interface BookingCalendarProps {
   onDateTimeSelected?: (date: Date) => void;
 }
 
+interface Product {
+  id: number | null;
+  name: string;
+  price: number;
+  size: string;
+  inStock: boolean;
+}
+
 interface Customer {
   id: number | null;
   fullName: string;
@@ -23,4 +31,4 @@ interface Reservation {
   creationDateTime: Date | null;
 }
 
-export type { BookingCalendarProps, Reservation, Customer };
+export type { BookingCalendarProps, Reservation, Customer, Product };
