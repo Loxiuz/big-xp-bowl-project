@@ -120,8 +120,18 @@ export default function ReservationForm() {
               new Date("2022-01-01"),
               new Date("2022-01-02"),
               new Date("2022-01-03"),
+              new Date("2022-01-04"),
+              new Date("2022-01-05"),
             ]}
-            availableTimes={["10:00", "12:00", "14:00", "16:00"]}
+            availableTimes={[
+              "17:00",
+              "18:00",
+              "19:00",
+              "20:00",
+              "21:00",
+              "22:00",
+              "23:00",
+            ]}
             onDateTimeSelected={handleDateTimeSelected}
           />
           <label htmlFor="diningSeatAmount">Dining Seat Amount:</label>
