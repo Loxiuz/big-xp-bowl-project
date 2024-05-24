@@ -5,6 +5,8 @@ import ReservationForm from "./reservations/ReservationForm";
 import ManagerHome from "./manager/managerHome";
 import ProductsList from "./products/ProductsList";
 import ProductForm from "./products/ProductForm";
+import EmployeeHome from "./employees/EmployeeHome";
+import ReservationCalendar from "./reservations/ReservationCalendar";
 
 function App() {
   return (
@@ -13,7 +15,8 @@ function App() {
       <Route path="/" element={<Navigate to="/home" />} />
       <Route path="/home" element={<Home />} />
       <Route path="/booking" element={<ReservationForm />} />
-      <Route path="/employee" element={<h2>Employee</h2>} />
+      <Route path="/employee" element={<EmployeeHome />} />
+      <Route path="/employee/bookings" element={<ReservationCalendar />} />
       <Route path="/employee/bookings/:id/edit" />
       <Route path="/employee/sale" />
       <Route path="/manager" element={<ManagerHome />} />
