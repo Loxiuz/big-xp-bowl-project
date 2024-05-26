@@ -36,7 +36,7 @@ export default function ReservationCalendar() {
 
   function dayRow(date: number) {
     const activityBtns = (hours: number) => {
-      if (reservations.length > 0) {
+      if (reservations.length) {
         const bowlRes = reservations.filter((res) => {
           const activityStartDate = new Date(res.activityStart);
           return (

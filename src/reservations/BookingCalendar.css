@@ -1,0 +1,25 @@
+#bookingCalendar {
+  position: relative;
+  width: 100%;
+}
+
+#bookingCalendar button {
+  background-color: rgb(191, 191, 191);
+  width: 100%;
+  padding: 5%;
+  color: black;
+}
+
+#timeTag {
+  text-align: center;
+  border-bottom: none;
+  border-right: solid;
+  border-color: white;
+}
+
+.weekDayRow {
+  border-bottom: none;
+  border-right: solid;
+  border-color: white;
+  text-align: right;
+}

@@ -1,10 +1,11 @@
 import "./ReservationForm.css";
-import BookingDateTimes from "./BookingDateTimes";
+// import BookingDateTimes from "./BookingDateTimes";
 import { Customer, Equipment, Reservation } from "../services/types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomerForm from "../customers/CustomerForm";
 import { getReservations } from "../services/ReservationApi";
 import { getEquipment } from "../services/EquipmentApi";
+import BookingCalendar from "./BookingCalendar";
 
 export default function ReservationForm() {
   const [customerForm, setCustomerForm] = useState<Customer>({
@@ -28,7 +29,7 @@ export default function ReservationForm() {
     creationDateTime: null,
   });
   const [diningSeatAmount, setDiningSeatAmount] = useState(0);
-  const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
+  // const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
   const [equipment, setEquipment] = useState<Equipment[]>([]); //equipment available in the system
   const [availableAirHockeyTables, setAvailableAirHockeyTables] = useState(0); //amount of available air hockey tables
   const [availableStandardLanes, setAvailableStandardLanes] = useState(0); //amount of available lanes
@@ -65,33 +66,33 @@ export default function ReservationForm() {
     }
 
     // Adjust available lanes and tables based on reservations
-    if (reservations && reservations.length > 0) {
-      for (const reservation of reservations) {
-        const date = new Date(reservation.activityStart);
-        if (
-          date.getDate() === selectedDateTime.getDate() &&
-          date.getHours() === selectedDateTime.getHours()
-        ) {
-          if (reservation.activity === "bowling") {
-            standardLanes -= reservation.numberOfStandardLanes;
-            juniorLanes -= reservation.numberOfJrLanes;
-          } else if (reservation.activity === "airHockey") {
-            airHockeyTables -= reservation.numberOfAirTables;
-          }
-        }
-      }
-    }
+    // if (reservations && reservations.length > 0) {
+    //   for (const reservation of reservations) {
+    //     const date = new Date(reservation.activityStart);
+    //     if (
+    //       date.getDate() === selectedDateTime.getDate() &&
+    //       date.getHours() === selectedDateTime.getHours()
+    //     ) {
+    //       if (reservation.activity === "bowling") {
+    //         standardLanes -= reservation.numberOfStandardLanes;
+    //         juniorLanes -= reservation.numberOfJrLanes;
+    //       } else if (reservation.activity === "airHockey") {
+    //         airHockeyTables -= reservation.numberOfAirTables;
+    //       }
+    //     }
+    //   }
+    // }
 
     // Update state
     setAvailableAirHockeyTables(airHockeyTables);
     setAvailableStandardLanes(standardLanes);
     setAvailableJuniorLanes(juniorLanes);
-  }, [equipment, selectedDateTime, reservations]);
+  }, [equipment, reservations]);
 
-  function handleDateTimeSelected(date: Date) {
-    setSelectedDateTime(date);
-    console.log(`Date: ${selectedDateTime}`);
-  }
+  // function handleDateTimeSelected(date: Date) {
+  //   setSelectedDateTime(date);
+  //   console.log(`Date: ${selectedDateTime}`);
+  // }
 
   function handleReservationFormChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.currentTarget;
@@ -131,6 +132,12 @@ export default function ReservationForm() {
   return (
     <>
       <h2>Booking</h2>
+      <button onClick={handleSubmit}>Book</button>
+      <BookingCalendar
+        defaultYear={new Date().getFullYear()}
+        defaultMonth={new Date().getMonth()}
+      />
+      <br />
       <form id="reservation-form">
         <div id="reservation-form-input">
           <div id="reservation-radio">
@@ -155,7 +162,7 @@ export default function ReservationForm() {
             name="numberOfParticipants"
             onChange={handleReservationFormChange}
           />
-          <BookingDateTimes
+          {/* <BookingDateTimes
             availableDates={[
               new Date("2022-01-01"),
               new Date("2022-01-02"),
@@ -173,7 +180,7 @@ export default function ReservationForm() {
               "23:00",
             ]}
             onDateTimeSelected={handleDateTimeSelected}
-          />
+          /> */}
           {reservationForm.activity === "bowling" && (
             <div>
               <label htmlFor="numberOfLanes">
@@ -216,7 +223,6 @@ export default function ReservationForm() {
           />
         </div>
         <CustomerForm onChange={handleCustomerFormChange} />
-        <button onClick={handleSubmit}>Book</button>
       </form>
     </>
   );

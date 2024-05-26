@@ -9,4 +9,6 @@
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
   column-gap: 5em;
+  margin: auto;
+  width: 50%;
 }
