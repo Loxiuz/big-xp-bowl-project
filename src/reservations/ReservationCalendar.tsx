@@ -62,7 +62,7 @@ export default function ReservationCalendar() {
               className="activityBtn"
               style={{
                 backgroundColor:
-                  reservations.length > 0 && bowlRes.length ? "green" : "red",
+                  reservations.length && bowlRes.length ? "green" : "red",
               }}
               onClick={(e) => {
                 if (bowlRes.length) {
@@ -77,7 +77,7 @@ export default function ReservationCalendar() {
               className="activityBtn"
               style={{
                 backgroundColor:
-                  reservations.length > 0 && hockeyRes.length ? "green" : "red",
+                  reservations.length && hockeyRes.length ? "green" : "red",
               }}
               onClick={(e) => {
                 if (hockeyRes.length) {
