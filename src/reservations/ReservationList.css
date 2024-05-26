@@ -1,0 +1,14 @@
+table {
+  width: 100%;
+  border-style: solid;
+  border-color: white;
+  border-collapse: collapse;
+}
+
+table th {
+  border-style: solid;
+  border-color: white;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}

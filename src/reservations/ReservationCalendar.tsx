@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import "./ReservationCalendar.css";
 import { getReservations } from "../services/ReservationApi";
 import { Reservation } from "../services/types";
+import ReservationDialog from "./ReservationDialog";
 
 export default function ReservationCalendar() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [selectedMonth, setSelectedMonth] = useState<number>(
     new Date().getMonth()
   );
+  const [selectedReservationOfDateTime, setSelectedReservationOfDateTime] =
+    useState<Reservation[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -25,10 +29,15 @@ export default function ReservationCalendar() {
     setSelectedMonth(parseInt(e.target.value));
   }
 
+  function handleActivityBtnClick(e: React.MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setIsDialogOpen(true);
+  }
+
   function dayRow(date: number) {
     const activityBtns = (hours: number) => {
       if (reservations.length > 0) {
-        const bowlRes = reservations.find((res) => {
+        const bowlRes = reservations.filter((res) => {
           const activityStartDate = new Date(res.activityStart);
           return (
             res.activity === "bowling" &&
@@ -37,7 +46,7 @@ export default function ReservationCalendar() {
             activityStartDate.getHours() === hours
           );
         });
-        const hockeyRes = reservations.find((res) => {
+        const hockeyRes = reservations.filter((res) => {
           const activityStartDate = new Date(res.activityStart);
           return (
             res.activity === "airHockey" &&
@@ -53,7 +62,13 @@ export default function ReservationCalendar() {
               className="activityBtn"
               style={{
                 backgroundColor:
-                  reservations.length > 0 && bowlRes ? "green" : "red",
+                  reservations.length > 0 && bowlRes.length ? "green" : "red",
+              }}
+              onClick={(e) => {
+                if (bowlRes.length) {
+                  setSelectedReservationOfDateTime(bowlRes);
+                  handleActivityBtnClick(e);
+                }
               }}
             >
               B
@@ -62,7 +77,13 @@ export default function ReservationCalendar() {
               className="activityBtn"
               style={{
                 backgroundColor:
-                  reservations.length > 0 && hockeyRes ? "green" : "red",
+                  reservations.length > 0 && hockeyRes.length ? "green" : "red",
+              }}
+              onClick={(e) => {
+                if (hockeyRes.length) {
+                  setSelectedReservationOfDateTime(hockeyRes);
+                  handleActivityBtnClick(e);
+                }
               }}
             >
               H
@@ -84,7 +105,7 @@ export default function ReservationCalendar() {
   function monthTable(month: number) {
     function getDaysOfMonth() {
       const weekDays: string[] = [];
-      const date = new Date(2024, month, 1);
+      const date = new Date(new Date().getFullYear(), month, 1);
 
       while (date.getMonth() === month) {
         switch (date.getDay()) {
@@ -117,7 +138,7 @@ export default function ReservationCalendar() {
       return weekDays.map((day, i) => (
         <tr key={i}>
           <th className="weekDayRow">
-            2024-{month + 1}-{i + 1}
+            {date.getFullYear()}-{month + 1}-{i + 1}
             <br />
             {day}
           </th>
@@ -180,6 +201,11 @@ export default function ReservationCalendar() {
       <br />
       <br />
       {monthTable(selectedMonth)}
+      <ReservationDialog
+        reservations={selectedReservationOfDateTime}
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+      />
     </div>
   );
 }

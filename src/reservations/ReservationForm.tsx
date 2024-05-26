@@ -29,12 +29,10 @@ export default function ReservationForm() {
   });
   const [diningSeatAmount, setDiningSeatAmount] = useState(0);
   const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
-  // Get initial value from equipment-------------------------------------
   const [equipment, setEquipment] = useState<Equipment[]>([]); //equipment available in the system
   const [availableAirHockeyTables, setAvailableAirHockeyTables] = useState(0); //amount of available air hockey tables
   const [availableStandardLanes, setAvailableStandardLanes] = useState(0); //amount of available lanes
   const [availableJuniorLanes, setAvailableJuniorLanes] = useState(0); //amount of available junior lanes
-  //---------------------------------------------------------
   const [reservations, setReservations] = useState<Reservation[]>([]);
 
   useEffect(() => {
