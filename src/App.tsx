@@ -20,7 +20,7 @@ function App() {
       <Route path="/employee/bookings/:id/edit" />
       <Route path="/employee/sale" />
       <Route path="/manager" element={<ManagerHome />} />
-      <Route path="/manager/schedules" />
+      <Route path="/manager/schedules" element={<h2>Schedules</h2>} />
       <Route path="/manager/products" element={<ProductsList />} />
       <Route path="/manager/products/create" element={<ProductForm />} />
       <Route path="/manager/products/:id/edit" element={<ProductForm />} />
