@@ -1,11 +1,10 @@
 interface BookingCalendarProps {
   defaultMonth: number;
   defaultYear: number;
-  handleChosenDateTime: (dateTime: Date) => void;
   handleAvailableStandardLanes: (lanes: number) => void;
   handleAvailableJuniorLanes: (lanes: number) => void;
   handleAvailableAirHockeyTables: (tables: number) => void;
-  handleActivity: (activity: string, dateTime: Date) => void;
+  handleActivityDateTime: (activity: string, dateTime: Date) => void;
 }
 
 interface Equipment {

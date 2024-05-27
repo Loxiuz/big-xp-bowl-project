@@ -26,43 +26,45 @@ export default function ReservationForm() {
     creationDateTime: null,
   });
   const [diningSeatAmount, setDiningSeatAmount] = useState(0);
-  const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
   const [availableStandardLanes, setAvailableStandardLanes] = useState(0);
   const [availableJuniorLanes, setAvailableJuniorLanes] = useState(0);
   const [availableAirHockeyTables, setAvailableAirHockeyTables] = useState(0);
-  const [activityAtDateTime, setActivityAtDateTime] = useState<{
-    activity: string;
-    dateTime: Date;
-  }>({
-    activity: "",
-    dateTime: new Date(),
-  });
-
-  function handleDateTimeSelected(date: Date) {
-    setSelectedDateTime(date);
-  }
-
-  useEffect(() => {
-    console.log(`Date: ${selectedDateTime}`);
-  });
-
   function handleReservationFormChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.currentTarget;
     setReservationForm({ ...reservationForm, [name]: value });
   }
 
-  function handleChosenActivity(activity: string, dateTime: Date) {
-    setActivityAtDateTime({ activity, dateTime });
+  function handleChosenActivityDateTime(activity: string, dateTime: Date) {
+    setReservationForm((prevState) => ({
+      ...prevState,
+      activity: activity,
+      activityStart: dateTime,
+    }));
   }
+
+  // useEffect(() => {
+  //   if (reservationForm.activity === "bowling") {
+  //     reservationForm.numberOfAirTables = 0;
+  //   } else if (reservationForm.activity === "airHockey") {
+  //     reservationForm.numberOfStandardLanes = 0;
+  //     reservationForm.numberOfJrLanes = 0;
+  //   }
+  // });
 
   useEffect(() => {
     if (reservationForm.activity === "bowling") {
-      reservationForm.numberOfAirTables = 0;
+      setReservationForm((prevState) => ({
+        ...prevState,
+        numberOfAirTables: 0,
+      }));
     } else if (reservationForm.activity === "airHockey") {
-      reservationForm.numberOfStandardLanes = 0;
-      reservationForm.numberOfJrLanes = 0;
+      setReservationForm((prevState) => ({
+        ...prevState,
+        numberOfStandardLanes: 0,
+        numberOfJrLanes: 0,
+      }));
     }
-  });
+  }, [reservationForm.activity]);
 
   function handleCustomerFormChange(customer: Customer) {
     setCustomerForm(customer);
@@ -93,24 +95,23 @@ export default function ReservationForm() {
       <BookingCalendar
         defaultYear={new Date().getFullYear()}
         defaultMonth={new Date().getMonth()}
-        handleChosenDateTime={handleDateTimeSelected}
         handleAvailableStandardLanes={setAvailableStandardLanes}
         handleAvailableJuniorLanes={setAvailableJuniorLanes}
         handleAvailableAirHockeyTables={setAvailableAirHockeyTables}
-        handleActivity={handleChosenActivity}
+        handleActivityDateTime={handleChosenActivityDateTime}
       />
       <br />
       <form id="reservation-form">
         <div id="reservation-form-input">
-          {activityAtDateTime.activity === "bowling" && (
+          {reservationForm.activity === "bowling" && (
             <div>
               <h3>Bowling</h3>
               <p>
-                {activityAtDateTime.dateTime.getDate()}-
-                {activityAtDateTime.dateTime.getMonth() + 1}-
-                {activityAtDateTime.dateTime.getFullYear()}
+                {reservationForm.activityStart.getDate()}-
+                {reservationForm.activityStart.getMonth() + 1}-
+                {reservationForm.activityStart.getFullYear()}
               </p>
-              <p>{activityAtDateTime.dateTime.getHours()}:00</p>
+              <p>{reservationForm.activityStart.getHours()}:00</p>
               <label>
                 Standard Lanes ({availableStandardLanes} available):{" "}
               </label>
@@ -127,15 +128,15 @@ export default function ReservationForm() {
               />
             </div>
           )}
-          {activityAtDateTime.activity === "airHockey" && (
+          {reservationForm.activity === "airHockey" && (
             <div>
               <h3>Air Hockey</h3>
               <p>
-                {activityAtDateTime.dateTime.getDate()}-
-                {activityAtDateTime.dateTime.getMonth() + 1}-
-                {activityAtDateTime.dateTime.getFullYear()}
+                {reservationForm.activityStart.getDate()}-
+                {reservationForm.activityStart.getMonth() + 1}-
+                {reservationForm.activityStart.getFullYear()}
               </p>
-              <p>{activityAtDateTime.dateTime.getHours()}:00</p>
+              <p>{reservationForm.activityStart.getHours()}:00</p>
               <label>
                 Air Hockey Tables ({availableAirHockeyTables} available):{" "}
               </label>

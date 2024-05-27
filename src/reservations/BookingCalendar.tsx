@@ -139,11 +139,8 @@ export default function BookingCalendar(props: BookingCalendarProps) {
                 props.handleAvailableJuniorLanes(
                   availableLanes(bowlRes).juniorLanes
                 );
-                props.handleActivity(
+                props.handleActivityDateTime(
                   "bowling",
-                  new Date(defaultYear, selectedMonth, date, hour)
-                );
-                props.handleChosenDateTime(
                   new Date(defaultYear, selectedMonth, date, hour)
                 );
               }}
@@ -165,11 +162,8 @@ export default function BookingCalendar(props: BookingCalendarProps) {
                 props.handleAvailableAirHockeyTables(
                   availableTables(hockeyRes)
                 );
-                props.handleActivity(
+                props.handleActivityDateTime(
                   "airHockey",
-                  new Date(defaultYear, selectedMonth, date, hour)
-                );
-                props.handleChosenDateTime(
                   new Date(defaultYear, selectedMonth, date, hour)
                 );
               }}
