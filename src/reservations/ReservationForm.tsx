@@ -1,10 +1,7 @@
 import "./ReservationForm.css";
-// import BookingDateTimes from "./BookingDateTimes";
-import { Customer, Equipment, Reservation } from "../services/types";
+import { Customer, Reservation } from "../services/types";
 import React, { useEffect, useState } from "react";
 import CustomerForm from "../customers/CustomerForm";
-import { getReservations } from "../services/ReservationApi";
-import { getEquipment } from "../services/EquipmentApi";
 import BookingCalendar from "./BookingCalendar";
 
 export default function ReservationForm() {
@@ -29,74 +26,33 @@ export default function ReservationForm() {
     creationDateTime: null,
   });
   const [diningSeatAmount, setDiningSeatAmount] = useState(0);
-  // const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
-  const [equipment, setEquipment] = useState<Equipment[]>([]); //equipment available in the system
-  const [availableAirHockeyTables, setAvailableAirHockeyTables] = useState(0); //amount of available air hockey tables
-  const [availableStandardLanes, setAvailableStandardLanes] = useState(0); //amount of available lanes
-  const [availableJuniorLanes, setAvailableJuniorLanes] = useState(0); //amount of available junior lanes
-  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
+  const [availableStandardLanes, setAvailableStandardLanes] = useState(0);
+  const [availableJuniorLanes, setAvailableJuniorLanes] = useState(0);
+  const [availableAirHockeyTables, setAvailableAirHockeyTables] = useState(0);
+  const [activityAtDateTime, setActivityAtDateTime] = useState<{
+    activity: string;
+    dateTime: Date;
+  }>({
+    activity: "",
+    dateTime: new Date(),
+  });
+
+  function handleDateTimeSelected(date: Date) {
+    setSelectedDateTime(date);
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const reservationRes = await getReservations();
-      const equipmentRes = await getEquipment();
-      setReservations(reservationRes);
-      setEquipment(equipmentRes);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    // Initialize available lanes and tables
-    let airHockeyTables = 0;
-    let standardLanes = 0;
-    let juniorLanes = 0;
-
-    // Set available lanes and tables based on equipment
-    if (equipment && equipment.length > 0) {
-      for (const item of equipment) {
-        if (item.name === "air_hockey_table") {
-          airHockeyTables = item.quantity;
-        } else if (item.name === "standard_lane") {
-          standardLanes = item.quantity;
-        } else if (item.name === "junior_lane") {
-          juniorLanes = item.quantity;
-        }
-      }
-    }
-
-    // Adjust available lanes and tables based on reservations
-    // if (reservations && reservations.length > 0) {
-    //   for (const reservation of reservations) {
-    //     const date = new Date(reservation.activityStart);
-    //     if (
-    //       date.getDate() === selectedDateTime.getDate() &&
-    //       date.getHours() === selectedDateTime.getHours()
-    //     ) {
-    //       if (reservation.activity === "bowling") {
-    //         standardLanes -= reservation.numberOfStandardLanes;
-    //         juniorLanes -= reservation.numberOfJrLanes;
-    //       } else if (reservation.activity === "airHockey") {
-    //         airHockeyTables -= reservation.numberOfAirTables;
-    //       }
-    //     }
-    //   }
-    // }
-
-    // Update state
-    setAvailableAirHockeyTables(airHockeyTables);
-    setAvailableStandardLanes(standardLanes);
-    setAvailableJuniorLanes(juniorLanes);
-  }, [equipment, reservations]);
-
-  // function handleDateTimeSelected(date: Date) {
-  //   setSelectedDateTime(date);
-  //   console.log(`Date: ${selectedDateTime}`);
-  // }
+    console.log(`Date: ${selectedDateTime}`);
+  });
 
   function handleReservationFormChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.currentTarget;
     setReservationForm({ ...reservationForm, [name]: value });
+  }
+
+  function handleChosenActivity(activity: string, dateTime: Date) {
+    setActivityAtDateTime({ activity, dateTime });
   }
 
   useEffect(() => {
@@ -127,6 +83,7 @@ export default function ReservationForm() {
 
   useEffect(() => {
     console.log("Reservation form", reservationForm);
+    console.log("Customer form", customerForm);
   });
 
   return (
@@ -136,65 +93,33 @@ export default function ReservationForm() {
       <BookingCalendar
         defaultYear={new Date().getFullYear()}
         defaultMonth={new Date().getMonth()}
+        handleChosenDateTime={handleDateTimeSelected}
+        handleAvailableStandardLanes={setAvailableStandardLanes}
+        handleAvailableJuniorLanes={setAvailableJuniorLanes}
+        handleAvailableAirHockeyTables={setAvailableAirHockeyTables}
+        handleActivity={handleChosenActivity}
       />
       <br />
       <form id="reservation-form">
         <div id="reservation-form-input">
-          <div id="reservation-radio">
-            <input
-              type="radio"
-              name="activity"
-              value="bowling"
-              onChange={handleReservationFormChange}
-            />{" "}
-            Bowling
-            <input
-              type="radio"
-              name="activity"
-              value="airHockey"
-              onChange={handleReservationFormChange}
-            />{" "}
-            Air Hockey
-          </div>
-          <label htmlFor="noOfParticipants">Number of Participants:</label>
-          <input
-            type="number"
-            name="numberOfParticipants"
-            onChange={handleReservationFormChange}
-          />
-          {/* <BookingDateTimes
-            availableDates={[
-              new Date("2022-01-01"),
-              new Date("2022-01-02"),
-              new Date("2022-01-03"),
-              new Date("2022-01-04"),
-              new Date("2022-01-05"),
-            ]}
-            availableTimes={[
-              "17:00",
-              "18:00",
-              "19:00",
-              "20:00",
-              "21:00",
-              "22:00",
-              "23:00",
-            ]}
-            onDateTimeSelected={handleDateTimeSelected}
-          /> */}
-          {reservationForm.activity === "bowling" && (
+          {activityAtDateTime.activity === "bowling" && (
             <div>
-              <label htmlFor="numberOfLanes">
-                Number of standard Lanes ({availableStandardLanes} available):
+              <h3>Bowling</h3>
+              <p>
+                {activityAtDateTime.dateTime.getDate()}-
+                {activityAtDateTime.dateTime.getMonth()}-
+                {activityAtDateTime.dateTime.getFullYear()}
+              </p>
+              <p>{activityAtDateTime.dateTime.getHours()}:00</p>
+              <label>
+                Standard Lanes ({availableStandardLanes} available):{" "}
               </label>
               <input
                 type="number"
-                name="numberOfLanes"
+                name="numberOfStandardLanes"
                 onChange={handleReservationFormChange}
               />
-              <br />
-              <label htmlFor="numberOfJrLanes">
-                Number of junior Lanes ({availableJuniorLanes} available):
-              </label>
+              <label>Junior Lanes ({availableJuniorLanes} available): </label>
               <input
                 type="number"
                 name="numberOfJrLanes"
@@ -202,11 +127,17 @@ export default function ReservationForm() {
               />
             </div>
           )}
-          {reservationForm.activity === "airHockey" && (
+          {activityAtDateTime.activity === "airHockey" && (
             <div>
-              <label htmlFor="numberOfAirTables">
-                Number of Air Hockey Tables ({availableAirHockeyTables}{" "}
-                available):
+              <h3>Air Hockey</h3>
+              <p>
+                {activityAtDateTime.dateTime.getDate()}-
+                {activityAtDateTime.dateTime.getMonth()}-
+                {activityAtDateTime.dateTime.getFullYear()}
+              </p>
+              <p>{activityAtDateTime.dateTime.getHours()}:00</p>
+              <label>
+                Air Hockey Tables ({availableAirHockeyTables} available):{" "}
               </label>
               <input
                 type="number"
@@ -215,6 +146,12 @@ export default function ReservationForm() {
               />
             </div>
           )}
+          <label htmlFor="noOfParticipants">Number of Participants:</label>
+          <input
+            type="number"
+            name="numberOfParticipants"
+            onChange={handleReservationFormChange}
+          />
           <label htmlFor="diningSeatAmount">Dining Seat Amount:</label>
           <input
             type="number"
