@@ -107,7 +107,7 @@ export default function ReservationForm() {
               <h3>Bowling</h3>
               <p>
                 {activityAtDateTime.dateTime.getDate()}-
-                {activityAtDateTime.dateTime.getMonth()}-
+                {activityAtDateTime.dateTime.getMonth() + 1}-
                 {activityAtDateTime.dateTime.getFullYear()}
               </p>
               <p>{activityAtDateTime.dateTime.getHours()}:00</p>
@@ -132,7 +132,7 @@ export default function ReservationForm() {
               <h3>Air Hockey</h3>
               <p>
                 {activityAtDateTime.dateTime.getDate()}-
-                {activityAtDateTime.dateTime.getMonth()}-
+                {activityAtDateTime.dateTime.getMonth() + 1}-
                 {activityAtDateTime.dateTime.getFullYear()}
               </p>
               <p>{activityAtDateTime.dateTime.getHours()}:00</p>
