@@ -7,28 +7,33 @@ import { getDiningTables } from "../services/DiningTables";
 import { createUpdateCustomer, getCustomers } from "../services/CustomerApi";
 import { createUpdateReservation } from "../services/ReservationApi";
 
+const EMPTY_RESERVATION: Reservation = {
+  id: null,
+  customerId: null,
+  diningTableId: null,
+  activity: "",
+  numberOfStandardLanes: 0,
+  numberOfJrLanes: 0,
+  numberOfAirTables: 0,
+  numberOfParticipants: 0,
+  activityStart: new Date(),
+  activityEnd: new Date(),
+  creationDateTime: null,
+  isValid: false,
+};
+
+const EMPTY_CUSTOMER: Customer = {
+  id: null,
+  fullName: "",
+  email: "",
+  phoneNumber: "",
+  birthDate: null,
+};
+
 export default function ReservationForm() {
-  const [customerForm, setCustomerForm] = useState<Customer>({
-    id: null,
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    birthDate: null,
-  });
-  const [reservationForm, setReservationForm] = useState<Reservation>({
-    id: null,
-    customerId: null,
-    diningTableId: null,
-    activity: "",
-    numberOfStandardLanes: 0,
-    numberOfJrLanes: 0,
-    numberOfAirTables: 0,
-    numberOfParticipants: 0,
-    activityStart: new Date(),
-    activityEnd: new Date(),
-    creationDateTime: null,
-    isValid: false,
-  });
+  const [customerForm, setCustomerForm] = useState<Customer>(EMPTY_CUSTOMER);
+  const [reservationForm, setReservationForm] =
+    useState<Reservation>(EMPTY_RESERVATION);
   const [diningSeatAmount, setDiningSeatAmount] = useState(0);
   const [availableStandardLanes, setAvailableStandardLanes] = useState(0);
   const [availableJuniorLanes, setAvailableJuniorLanes] = useState(0);
@@ -170,12 +175,18 @@ export default function ReservationForm() {
         customer = await createUpdateCustomer(customerForm);
       }
       if (customer) {
-        reservationForm.customerId = customer.id;
-        reservationForm.isValid = true;
+        const updatedReservationForm = {
+          ...reservationForm,
+          customerId: customer.id,
+          isValid: true,
+        };
         if (isParticipantInputsValid()) {
-          const reservation = await createUpdateReservation(reservationForm);
+          const reservation = await createUpdateReservation(
+            updatedReservationForm
+          );
           if (reservation) {
             console.log("Submitting booking", reservation, customer);
+            setReservationForm(EMPTY_RESERVATION);
             alert("Booking submitted");
             return;
           } else {
