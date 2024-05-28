@@ -29,8 +29,8 @@ export default function CustomerForm({ onChange }: CustomerFormProps) {
       <input type="text" name="fullName" onChange={handleInputChange} />
       <label htmlFor="email">Email:</label>
       <input type="email" name="email" onChange={handleInputChange} />
-      <label htmlFor="phone">Phone:</label>
-      <input type="text" name="phone" onChange={handleInputChange} />
+      <label htmlFor="phoneNumber">Phone:</label>
+      <input type="text" name="phoneNumber" onChange={handleInputChange} />
       <label htmlFor="birthDate">Birth Date:</label>
       <input type="date" name="birthDate" onChange={handleInputChange} />
     </div>

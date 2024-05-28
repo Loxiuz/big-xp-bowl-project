@@ -3,6 +3,9 @@ import { Customer, Reservation } from "../services/types";
 import React, { useEffect, useState } from "react";
 import CustomerForm from "../customers/CustomerForm";
 import BookingCalendar from "./BookingCalendar";
+import { getDiningTables } from "../services/DiningTables";
+import { createUpdateCustomer, getCustomers } from "../services/CustomerApi";
+import { createUpdateReservation } from "../services/ReservationApi";
 
 export default function ReservationForm() {
   const [customerForm, setCustomerForm] = useState<Customer>({
@@ -24,6 +27,7 @@ export default function ReservationForm() {
     activityStart: new Date(),
     activityEnd: new Date(),
     creationDateTime: null,
+    isValid: false,
   });
   const [diningSeatAmount, setDiningSeatAmount] = useState(0);
   const [availableStandardLanes, setAvailableStandardLanes] = useState(0);
@@ -42,14 +46,39 @@ export default function ReservationForm() {
     }));
   }
 
-  // useEffect(() => {
-  //   if (reservationForm.activity === "bowling") {
-  //     reservationForm.numberOfAirTables = 0;
-  //   } else if (reservationForm.activity === "airHockey") {
-  //     reservationForm.numberOfStandardLanes = 0;
-  //     reservationForm.numberOfJrLanes = 0;
-  //   }
-  // });
+  useEffect(() => {
+    if (diningSeatAmount > 0) {
+      const fetchDiningTables = async () => {
+        const response = await getDiningTables();
+        const availableTable = response.find(
+          (table) => table.numberOfSeats >= diningSeatAmount
+        );
+        if (availableTable) {
+          setReservationForm((prevState) => ({
+            ...prevState,
+            diningTableId: availableTable.id,
+          }));
+        } else {
+          setReservationForm((prevState) => ({
+            ...prevState,
+            diningTableId: null,
+          }));
+        }
+      };
+      fetchDiningTables();
+    }
+  }, [diningSeatAmount, setReservationForm]);
+
+  useEffect(() => {
+    if (reservationForm.activityStart !== new Date()) {
+      const activityEnd = new Date(reservationForm.activityStart);
+      activityEnd.setHours(activityEnd.getHours() + 1);
+      setReservationForm((prevState) => ({
+        ...prevState,
+        activityEnd: activityEnd,
+      }));
+    }
+  }, [reservationForm.activityStart]);
 
   useEffect(() => {
     if (reservationForm.activity === "bowling") {
@@ -66,7 +95,7 @@ export default function ReservationForm() {
     }
   }, [reservationForm.activity]);
 
-  function handleCustomerFormChange(customer: Customer) {
+  async function handleCustomerFormChange(customer: Customer) {
     setCustomerForm(customer);
   }
 
@@ -74,19 +103,104 @@ export default function ReservationForm() {
     e: React.ChangeEvent<HTMLInputElement>
   ) {
     setDiningSeatAmount(parseInt(e.currentTarget.value));
-    console.log("Dining seat amount", diningSeatAmount);
   }
 
-  function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
+  /*
+    Technically this function is not needed, 
+    but it is a good practice to validate the inputs before submitting the form.
+    Though right now it doesn't function correctly.
+
+   */
+  // function isActivityInputsValid() {
+  //   if (reservationForm.activity === "bowling") {
+  //     const standardLanesValid =
+  //       reservationForm.numberOfStandardLanes > 0 &&
+  //       reservationForm.numberOfStandardLanes <= availableStandardLanes;
+  //     const juniorLanesValid =
+  //       reservationForm.numberOfJrLanes > 0 &&
+  //       reservationForm.numberOfJrLanes <= availableJuniorLanes;
+  //     const totalLanesValid =
+  //       reservationForm.numberOfStandardLanes +
+  //         reservationForm.numberOfJrLanes <=
+  //       4;
+
+  //     return (standardLanesValid || juniorLanesValid) && totalLanesValid;
+  //   } else if (reservationForm.activity === "airHockey") {
+  //     return (
+  //       reservationForm.numberOfAirTables > 0 &&
+  //       reservationForm.numberOfAirTables <= availableAirHockeyTables &&
+  //       reservationForm.numberOfAirTables <= 2
+  //     );
+  //   }
+  //   return false;
+  // }
+
+  function isParticipantInputsValid() {
+    return reservationForm.numberOfParticipants > 0;
+  }
+
+  function isCustomerInputsValid() {
+    return (
+      customerForm.fullName !== "" &&
+      customerForm.email !== "" &&
+      customerForm.phoneNumber !== "" &&
+      customerForm.birthDate !== null
+    );
+  }
+
+  async function getExistingCustomer() {
+    const customers = await getCustomers();
+    return customers.find(
+      (customer) =>
+        customer.fullName === customerForm.fullName &&
+        customer.email === customerForm.email &&
+        customer.phoneNumber === customerForm.phoneNumber &&
+        customer.birthDate === customerForm.birthDate
+    );
+  }
+
+  async function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    console.log("Submitting booking", reservationForm, customerForm);
-    alert("Booking submitted");
+    let customer = customerForm;
+    if (isCustomerInputsValid()) {
+      const existingCustomer = await getExistingCustomer();
+      if (existingCustomer) {
+        customer = existingCustomer;
+      } else {
+        customer = await createUpdateCustomer(customerForm);
+      }
+      if (customer) {
+        reservationForm.customerId = customer.id;
+        reservationForm.isValid = true;
+        if (isParticipantInputsValid()) {
+          const reservation = await createUpdateReservation(reservationForm);
+          if (reservation) {
+            console.log("Submitting booking", reservation, customer);
+            alert("Booking submitted");
+            return;
+          } else {
+            alert("Failed to create reservation. Booking not submitted");
+            return;
+          }
+        } else {
+          alert(
+            "Reservation information (including tables/lanes or number of participants) is not valid. Booking not submitted"
+          );
+          return;
+        }
+      } else {
+        alert("Failed to create customer. Booking not submitted");
+        return;
+      }
+    } else {
+      alert("Customer information is not valid. Booking not submitted");
+      return;
+    }
   }
 
   useEffect(() => {
-    console.log("Reservation form", reservationForm);
-    console.log("Customer form", customerForm);
-  });
+    console.log(reservationForm, customerForm);
+  }, [reservationForm, customerForm]);
 
   return (
     <>
@@ -111,7 +225,10 @@ export default function ReservationForm() {
                 {reservationForm.activityStart.getMonth() + 1}-
                 {reservationForm.activityStart.getFullYear()}
               </p>
-              <p>{reservationForm.activityStart.getHours()}:00</p>
+              <p>
+                {reservationForm.activityStart.getHours()}:00 -{" "}
+                {reservationForm.activityEnd.getHours()}:00
+              </p>
               <label>
                 Standard Lanes ({availableStandardLanes} available):{" "}
               </label>
@@ -136,7 +253,10 @@ export default function ReservationForm() {
                 {reservationForm.activityStart.getMonth() + 1}-
                 {reservationForm.activityStart.getFullYear()}
               </p>
-              <p>{reservationForm.activityStart.getHours()}:00</p>
+              <p>
+                {reservationForm.activityStart.getHours()}:00 -{" "}
+                {reservationForm.activityEnd.getHours()}:00
+              </p>
               <label>
                 Air Hockey Tables ({availableAirHockeyTables} available):{" "}
               </label>
@@ -153,7 +273,9 @@ export default function ReservationForm() {
             name="numberOfParticipants"
             onChange={handleReservationFormChange}
           />
-          <label htmlFor="diningSeatAmount">Dining Seat Amount:</label>
+          <label htmlFor="diningSeatAmount">
+            Dining Seat Amount (optional):
+          </label>
           <input
             type="number"
             name="diningSeatAmount"

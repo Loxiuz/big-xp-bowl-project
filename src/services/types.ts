@@ -7,6 +7,11 @@ interface BookingCalendarProps {
   handleActivityDateTime: (activity: string, dateTime: Date) => void;
 }
 
+interface DiningTable {
+  id: number | null;
+  numberOfSeats: number;
+}
+
 interface Equipment {
   id: number | null;
   name: string;
@@ -41,6 +46,14 @@ interface Reservation {
   activityStart: Date;
   activityEnd: Date;
   creationDateTime: Date | null;
+  isValid: boolean;
 }
 
-export type { BookingCalendarProps, Reservation, Customer, Product, Equipment };
+export type {
+  DiningTable,
+  BookingCalendarProps,
+  Reservation,
+  Customer,
+  Product,
+  Equipment,
+};

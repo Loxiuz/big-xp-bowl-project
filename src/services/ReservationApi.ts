@@ -14,7 +14,7 @@ async function createUpdateReservation(
   const options = makeOptions(method, newReservation);
   const URL = newReservation.id
     ? `${RESERVATION_URL}/${newReservation.id}`
-    : RESERVATION_URL;
+    : RESERVATION_URL + "/create";
   return fetch(URL, options).then(handleHttpErrors);
 }
 
