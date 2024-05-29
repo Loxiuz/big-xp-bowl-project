@@ -186,8 +186,8 @@ export default function ReservationForm() {
           );
           if (reservation) {
             console.log("Submitting booking", reservation, customer);
-            setReservationForm(EMPTY_RESERVATION);
             alert("Booking submitted");
+            window.location.reload();
             return;
           } else {
             alert("Failed to create reservation. Booking not submitted");
@@ -208,10 +208,6 @@ export default function ReservationForm() {
       return;
     }
   }
-
-  useEffect(() => {
-    console.log(reservationForm, customerForm);
-  }, [reservationForm, customerForm]);
 
   return (
     <>
