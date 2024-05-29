@@ -7,6 +7,7 @@ import ProductsList from "./products/ProductsList";
 import ProductForm from "./products/ProductForm";
 import EmployeeHome from "./employees/EmployeeHome";
 import ReservationCalendar from "./reservations/ReservationCalendar";
+import LanesAndAirTablesManagement from "./manager/LanesAndAirTablesManagement";
 
 function App() {
   return (
@@ -24,7 +25,10 @@ function App() {
       <Route path="/manager/products" element={<ProductsList />} />
       <Route path="/manager/products/create" element={<ProductForm />} />
       <Route path="/manager/products/:id/edit" element={<ProductForm />} />
-      <Route path="/manager/maintenance" element={<h2>Maintenance</h2>} />
+      <Route
+        path="/manager/maintenance"
+        element={<LanesAndAirTablesManagement />}
+      />
       <Route path="/operator" element={<h2>Operator</h2>} />
       <Route path="/operator/equipment" />
     </Routes>
