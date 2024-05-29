@@ -17,7 +17,7 @@ function App() {
       <Route path="/booking" element={<ReservationForm />} />
       <Route path="/employee" element={<EmployeeHome />} />
       <Route path="/employee/bookings" element={<ReservationCalendar />} />
-      <Route path="/employee/bookings/:id/edit" />
+      <Route path="/employee/bookings/edit" element={<ReservationForm />} />
       <Route path="/employee/sale" />
       <Route path="/manager" element={<ManagerHome />} />
       <Route path="/manager/schedules" element={<h2>Schedules</h2>} />

@@ -6,6 +6,7 @@ import BookingCalendar from "./BookingCalendar";
 import { getDiningTables } from "../services/DiningTables";
 import { createUpdateCustomer, getCustomers } from "../services/CustomerApi";
 import { createUpdateReservation } from "../services/ReservationApi";
+import { useLocation } from "react-router-dom";
 
 const EMPTY_RESERVATION: Reservation = {
   id: null,
@@ -16,8 +17,8 @@ const EMPTY_RESERVATION: Reservation = {
   numberOfJrLanes: 0,
   numberOfAirTables: 0,
   numberOfParticipants: 0,
-  activityStart: new Date(),
-  activityEnd: new Date(),
+  activityStart: new Date("0001:01:01T00:00:00Z"),
+  activityEnd: new Date("0001:01:01T00:00:00Z"),
   creationDateTime: null,
   isValid: false,
 };
@@ -38,6 +39,29 @@ export default function ReservationForm() {
   const [availableStandardLanes, setAvailableStandardLanes] = useState(0);
   const [availableJuniorLanes, setAvailableJuniorLanes] = useState(0);
   const [availableAirHockeyTables, setAvailableAirHockeyTables] = useState(0);
+  const { state } = useLocation();
+
+  useEffect(() => {
+    if (state) {
+      const reservation = {
+        ...state.reservation,
+        activityStart: new Date(state.reservation.activityStart),
+        activityEnd: new Date(state.reservation.activityEnd),
+      };
+      setReservationForm(reservation);
+      const fetchCustomers = async () => {
+        const response = await getCustomers();
+        const customer = response.find(
+          (customer) => customer.id === reservation.customerId
+        );
+        if (customer) {
+          setCustomerForm(customer);
+        }
+      };
+      fetchCustomers();
+    }
+  }, [state]);
+
   function handleReservationFormChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.currentTarget;
     setReservationForm({ ...reservationForm, [name]: value });
@@ -242,12 +266,14 @@ export default function ReservationForm() {
               <input
                 type="number"
                 name="numberOfStandardLanes"
+                defaultValue={reservationForm.numberOfStandardLanes}
                 onChange={handleReservationFormChange}
               />
               <label>Junior Lanes ({availableJuniorLanes} available): </label>
               <input
                 type="number"
                 name="numberOfJrLanes"
+                defaultValue={reservationForm.numberOfJrLanes}
                 onChange={handleReservationFormChange}
               />
             </div>
@@ -270,6 +296,7 @@ export default function ReservationForm() {
               <input
                 type="number"
                 name="numberOfAirTables"
+                defaultValue={reservationForm.numberOfAirTables}
                 onChange={handleReservationFormChange}
               />
             </div>
@@ -278,6 +305,7 @@ export default function ReservationForm() {
           <input
             type="number"
             name="numberOfParticipants"
+            defaultValue={reservationForm.numberOfParticipants}
             onChange={handleReservationFormChange}
           />
           <label htmlFor="diningSeatAmount">
@@ -289,7 +317,10 @@ export default function ReservationForm() {
             onChange={handleDiningSeatAmountChange}
           />
         </div>
-        <CustomerForm onChange={handleCustomerFormChange} />
+        <CustomerForm
+          onChange={handleCustomerFormChange}
+          customerToEdit={customerForm}
+        />
       </form>
     </>
   );
