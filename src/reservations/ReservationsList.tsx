@@ -12,6 +12,7 @@ export default function ReservationList(props: {
     <table>
       <thead>
         <tr>
+          <th>ID</th>
           <th>Activity</th>
           <th>Start Time</th>
           <th>End Time</th>
@@ -21,6 +22,7 @@ export default function ReservationList(props: {
       <tbody>
         {reservations.map((reservation) => (
           <tr key={reservation.id}>
+            <td>{reservation.id}</td>
             <td>{reservation.activity}</td>
             <td>{reservation.activityStart.toString()}</td>
             <td>{reservation.activityEnd.toString()}</td>

@@ -17,8 +17,8 @@ const EMPTY_RESERVATION: Reservation = {
   numberOfJrLanes: 0,
   numberOfAirTables: 0,
   numberOfParticipants: 0,
-  activityStart: new Date("0001:01:01T00:00:00Z"),
-  activityEnd: new Date("0001:01:01T00:00:00Z"),
+  activityStart: new Date(),
+  activityEnd: new Date(),
   creationDateTime: null,
   isValid: false,
 };
@@ -61,6 +61,10 @@ export default function ReservationForm() {
       fetchCustomers();
     }
   }, [state]);
+
+  useEffect(() => {
+    console.log(reservationForm);
+  });
 
   function handleReservationFormChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.currentTarget;
@@ -205,13 +209,23 @@ export default function ReservationForm() {
           isValid: true,
         };
         if (isParticipantInputsValid()) {
+          const activityStart = new Date(reservationForm.activityStart);
+          activityStart.setMinutes(
+            activityStart.getMinutes() - activityStart.getTimezoneOffset()
+          );
+
+          const activityEnd = new Date(reservationForm.activityEnd);
+          activityEnd.setMinutes(
+            activityEnd.getMinutes() - activityEnd.getTimezoneOffset()
+          );
+          updatedReservationForm.activityStart = activityStart;
+          updatedReservationForm.activityEnd = activityEnd;
           const reservation = await createUpdateReservation(
             updatedReservationForm
           );
           if (reservation) {
             console.log("Submitting booking", reservation, customer);
             alert("Booking submitted");
-            window.location.reload();
             return;
           } else {
             alert("Failed to create reservation. Booking not submitted");

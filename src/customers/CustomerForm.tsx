@@ -65,7 +65,11 @@ export default function CustomerForm({
         type="date"
         name="birthDate"
         onChange={handleInputChange}
-        defaultValue={customerForm.birthDate?.toISOString().split("T")[0]}
+        defaultValue={
+          customerForm.birthDate instanceof Date
+            ? customerForm.birthDate.toISOString().split("T")[0]
+            : ""
+        }
       />
     </div>
   );
