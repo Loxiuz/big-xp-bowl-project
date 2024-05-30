@@ -1,0 +1,29 @@
+#equipment_order_dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 80%;
+  height: 100%;
+  width: 20em;
+  text-align: right;
+  top: 10em;
+}
+
+#equipment_order_dialog input {
+  width: 5em;
+}
+
+#order_dialog_status,
+h2,
+h3 {
+  text-align: center;
+}
+
+#order_dialog_status {
+  margin-bottom: 2em;
+}
+
+#order_dialog_status input {
+  width: 10em;
+  height: 10em;
+}

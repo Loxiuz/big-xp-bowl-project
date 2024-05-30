@@ -7,6 +7,12 @@ interface BookingCalendarProps {
   handleActivityDateTime: (activity: string, dateTime: Date) => void;
 }
 
+interface equipmentOrderDialogProps {
+  equipment: Equipment;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 interface DiningTable {
   id: number | null;
   numberOfSeats: number;
@@ -16,6 +22,7 @@ interface Equipment {
   id: number | null;
   name: string;
   quantity: number;
+  status: string;
 }
 
 interface Product {
@@ -52,6 +59,7 @@ interface Reservation {
 export type {
   DiningTable,
   BookingCalendarProps,
+  equipmentOrderDialogProps,
   Reservation,
   Customer,
   Product,

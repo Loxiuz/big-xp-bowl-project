@@ -8,6 +8,7 @@ import ProductForm from "./products/ProductForm";
 import EmployeeHome from "./employees/EmployeeHome";
 import ReservationCalendar from "./reservations/ReservationCalendar";
 import LanesAndAirTablesManagement from "./manager/LanesAndAirTablesManagement";
+import EquipmentList from "./equipment/EquipmentList";
 
 function App() {
   return (
@@ -29,8 +30,7 @@ function App() {
         path="/manager/maintenance"
         element={<LanesAndAirTablesManagement />}
       />
-      <Route path="/operator" element={<h2>Operator</h2>} />
-      <Route path="/operator/equipment" />
+      <Route path="/operator" element={<EquipmentList />} />
     </Routes>
   );
 }
