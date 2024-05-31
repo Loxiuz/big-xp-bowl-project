@@ -41,6 +41,16 @@ interface Customer {
   birthDate: Date | null;
 }
 
+interface Employee {
+  id: number | null;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  dateOfBith: Date | null;
+  isActive: boolean;
+  employeeSchedule: EmployeeSchedule | null;
+}
+
 interface Reservation {
   id: number | null;
   customerId: number | null;
@@ -56,12 +66,21 @@ interface Reservation {
   isValid: boolean;
 }
 
+interface EmployeeSchedule {
+  id: number | null;
+  employeeRole: string;
+  shiftStart: string;
+  shiftEnd: string;
+}
+
 export type {
   DiningTable,
   BookingCalendarProps,
   equipmentOrderDialogProps,
   Reservation,
   Customer,
+  Employee,
   Product,
   Equipment,
+  EmployeeSchedule,
 };
