@@ -5,7 +5,7 @@ export default function Home() {
 
   return (
     <div>
-      <h2>Welcome to the Home page!</h2>
+      <h2>Choose Purpose</h2>
       <button
         onClick={() => {
           nav("/booking");
